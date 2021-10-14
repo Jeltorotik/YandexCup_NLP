@@ -1,0 +1,11 @@
+pytorch
+tensorflow
+numpy
+sklearn
+scikit-learn
+scipy
+tqdm
+transformers
+pandas
+kenlm
+https://github.com/kpu/kenlm/archive/master.zip
