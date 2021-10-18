@@ -71,8 +71,9 @@ def get_w2v_indicies(a):
         if w in embs_voc:
             res.append((w, embs_voc[w]))
         else:
-            lemma = stemmer.lemmatize(w)[0]
-            res.append((embs_voc.get(lemma), None))
+            for lemma in stemmer.lemmatize(w):
+                if lemma.isalpha():
+                    res.append((w, embs_voc.get(lemma, None)))
     return res
 
 
@@ -256,11 +257,13 @@ def detox_light(line):
     
     words = normalize(line).split()
     sorted_words = sort_by_toxicity(words)
+    
   
-    while sorted_words:
-        toxic_toxicity, toxic_idx, toxic_word = sorted_words.pop()
-        if toxic_toxicity > 0.77:
+    for toxic_toxicity, toxic_idx, toxic_word in sorted_words[::-1]:
+        if toxic_toxicity > 0.5:
             words[toxic_idx] = "Спасибо"
+            if distance_score(line, ' '.join(words)) < 0.5:
+                words[toxic_idx] = toxic_word
 
         
 
